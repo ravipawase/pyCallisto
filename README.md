@@ -4,4 +4,4 @@ About pyCallisto
 pyCallisto is a python module which is collection of some utility functions useful for plotting, slicing, joining, generating lightcurves and "frequencycurves" from the radiohelliospectrometer data like Callisto
 
 
-Check the HTMl documentation for details.
+Check the HTML documentation for details.
