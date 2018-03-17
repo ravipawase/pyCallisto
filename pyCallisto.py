@@ -1,7 +1,10 @@
 
 
-#latest edit on 14/05/17
+#latest edit on 25/12/2017
+#pushed online on 17/03/2018
+
 #clobber flag added
+#hdu.close() added in all  functions to destroy HDU object after use, this optimises memory use.
 
 #apart from that following changes are included
 # time ticks default value 3 mins
