@@ -1,22 +1,22 @@
 # pyCallisto
-pyCallisto is a python module which is collection of some utility functions useful for plotting, slicing, joining, generating lightcurves and "frequencycurves" from the radiohelliospectrometer data like Callisto.
 
+pyCallisto is a image processing and data analysis python library developed for e-CALLISTO data (http://www.e-callisto.org/). However, this library could be used to process the data obtained using various solar radio spectrometers available around the globe.
 
 # Installation
 
-You can just keep this two file module in your working directory, import it in your script and do operations in just few lines of code.
+At present, you can use this library by copying the source files (pyCallisto.py and pyCallistoUtils.py) to a local folder. The data and main program have to located in the same folder. In the main program you have to import the source files as shown in sample_program.py. 
 
-# Prerequisites
+# Pre-requisites and Standard Python Libraries 
 
-You need Following things installed
-python 3.6
-numpy
-matpltlib
-astropy
+    python 3.6,
+    numpy,
+    matpltlib,
+    astropy.
 
 # Contributors
-    Ravindra Pawase
-    K. Sasikumar Raja
+
+    Mr. Ravindra Pawase, Team Lead (Machine Learning), Persistent Systems, Pune-411 004, India.
+    Dr. K. Sasikumar Raja, National Post Doctoral Fellow, Deparment of Physics, Indian Institute of Science Education and Research, Dr. Homi Bhabha Road, Pashan, Pune-411 008, India.
 
 # Feedback
 
