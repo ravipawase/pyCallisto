@@ -10,7 +10,7 @@ At present, you can use this library by copying the source files (pyCallisto.py 
 
     python 3.6,
     numpy,
-    matpltlib,
+    matplotlib,
     astropy.
 
 # Contributors
