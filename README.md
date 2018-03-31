@@ -15,9 +15,8 @@ matpltlib
 astropy
 
 # Contributors
-
- Ravindra Pawase
- K. Sasikumar Raja
+    Ravindra Pawase
+    K. Sasikumar Raja
 
 # Feedback
 
