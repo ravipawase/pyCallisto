@@ -15,8 +15,16 @@ At present, you can use this library by copying the source files (pyCallisto.py 
 
 # Contributors
 
-    Mr. Ravindra Pawase, Team Lead (Machine Learning), Persistent Systems, Pune-411 004, India.
-    Dr. K. Sasikumar Raja, National Post Doctoral Fellow, Deparment of Physics, Indian Institute of Science Education and Research, Dr. Homi Bhabha Road, Pashan, Pune-411 008, India.
+    Mr. Ravindra Pawase, 
+    Team Lead (Machine Learning), 
+    Persistent Systems, 
+    Pune-411 004, India.
+    
+    Dr. K. Sasikumar Raja, 
+    National Post Doctoral Fellow, 
+    Deparment of Physics, 
+    Indian Institute of Science Education and Research, 
+    Dr. Homi Bhabha Road, Pashan, Pune-411 008, India.
 
 # Feedback
 
