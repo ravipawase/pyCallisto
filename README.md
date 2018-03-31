@@ -27,5 +27,5 @@ If you have any feedback, queries, feature request you can drop a line at
 
 # Citation
 
-If you find pyCallisto library useful and you happen to use it in your work please consider citing it as "This work has made use of pyCallisto library, code is located at https://github.com/ravipawase/pyCallisto"
+If you find pyCallisto useful and make use of it in your work, we appreciate acknowledging the same. We recommend using the following line: "This work is made use of the pyCallisto library, which is available at https://github.com/ravipawase/pyCallisto"
 
