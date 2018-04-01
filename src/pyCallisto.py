@@ -657,7 +657,7 @@ class pyCallisto:
 			return data
 
 
-def showSpectrum(self, filepath, filetype):
+
 
 
 	def getFrequencySeries(self, plot=True, outpng ="frequency_series.png", returndata=False):
