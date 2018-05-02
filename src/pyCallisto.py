@@ -870,9 +870,9 @@ class pyCallisto:
 			#plt.show()
 			plt.savefig(outImage)
 			plt.clf()
-
-		if returnData:	
-			return (timeAxis, lightCurve)
+		else:
+			if returnData:	
+				return (timeAxis, lightCurve)
 
 
 
@@ -996,7 +996,7 @@ class pyCallisto:
 			
 			#print(bintblfreqdata.shape)
 			#print(bintblfreqdata)
-			
-		if returnData:	
-			return (bintblfreqdata, spectrum)
+		else:	
+			if returnData:	
+				return (bintblfreqdata, spectrum)
 
