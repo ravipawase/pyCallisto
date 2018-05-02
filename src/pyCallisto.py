@@ -516,8 +516,8 @@ class pyCallisto:
 		# update the bintabledata according to freq1 and freq2
 		try:
 			slicePt1 = np.argwhere((bintblfreqdata >= freq1) & (bintblfreqdata <= freq2))[0][0]
-			slicePt2 = np.argwhere((bintblfreqdata > freq1) & (bintblfreqdata < freq2))[-1][-1]
-			
+			slicePt2 = np.argwhere((bintblfreqdata > freq1) & (bintblfreqdata < freq2))[-1][-1]+1
+					#+1 at slicept2 is needed to accomodate the slicing style of python to get the slice of exact size
 			
 	
 		except:
@@ -544,7 +544,7 @@ class pyCallisto:
 		
 		#print(type(binTableDataFreqs))
 		#print(binTableDataFreqs.shape)
-		binTableDataFreqs = binTableDataFreqs[:,:-1,:]
+		#binTableDataFreqs = binTableDataFreqs[:,:-1,:]
 		#print(binTableDataFreqs.shape)
 		#binTableDataFreqs = binTableDataFreqs[:-1]	#removing the last entry, but we are sure of the mechanism here
 
