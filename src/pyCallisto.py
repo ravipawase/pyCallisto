@@ -515,7 +515,7 @@ class pyCallisto:
 	
 		# update the bintabledata according to freq1 and freq2
 		try:
-			slicePt1 = np.argwhere((bintblfreqdata > freq1) & (bintblfreqdata < freq2))[0][0]
+			slicePt1 = np.argwhere((bintblfreqdata >= freq1) & (bintblfreqdata <= freq2))[0][0]
 			slicePt2 = np.argwhere((bintblfreqdata > freq1) & (bintblfreqdata < freq2))[-1][-1]
 			
 			
@@ -539,9 +539,14 @@ class pyCallisto:
 			#raise SystemExit, 0
 			#sys.exit(1)
 		####
-		binTableDataFreqs = bintblfreqdata[np.argwhere((bintblfreqdata > freq1) & (bintblfreqdata < freq2))]
+		binTableDataFreqs = bintblfreqdata[np.argwhere((bintblfreqdata >= freq1) & (bintblfreqdata <= freq2))]
 		binTableDataFreqs = np.array([binTableDataFreqs])
 		
+		#print(type(binTableDataFreqs))
+		#print(binTableDataFreqs.shape)
+		binTableDataFreqs = binTableDataFreqs[:,:-1,:]
+		#print(binTableDataFreqs.shape)
+		#binTableDataFreqs = binTableDataFreqs[:-1]	#removing the last entry, but we are sure of the mechanism here
 
 		#################
 		xLength = int(imageData.shape[1]) 
@@ -569,7 +574,10 @@ class pyCallisto:
 		imageHeader['DATAMIN'] = imageData.min()
 		imageHeader['DATAMAX'] = imageData.max()
 		imageHeader['CRVAL2'] = imageData.shape[0]
-
+		
+		#print(slicePt1, slicePt2)
+		#print(imageData.shape)
+		
 		# create a primary hdu containing this image and header data
 		imageHdu = pyfits.PrimaryHDU(imageData, header=imageHeader)
 		newHduList = pyfits.HDUList([imageHdu])
@@ -689,18 +697,19 @@ class pyCallisto:
 			#plt.show()
 			plt.savefig(outImage)
 		
-		if returnData:	
-			# generate numpy array of sec. of a day
-			xStart = int(imageHeader['CRVAL1'])
-			xStep = float(imageHeader['CDELT1'])  
-			xLength = int(imageHeader['NAXIS1'])
-			xEnd = xStart + (xStep * xLength)
-			timeInSec = np.arange(xStart, xEnd, xStep)
+		else:
+			if returnData:	
+				# generate numpy array of sec. of a day
+				xStart = int(imageHeader['CRVAL1'])
+				xStep = float(imageHeader['CDELT1'])  
+				xLength = int(imageHeader['NAXIS1'])
+				xEnd = xStart + (xStep * xLength)
+				timeInSec = np.arange(xStart, xEnd, xStep)
 		
-			# compose data into a list
-			data = [sumImage, timeInSec, timeAxis]
-			#hdus.close()
-			return data
+				# compose data into a list
+				data = [sumImage, timeInSec, timeAxis]
+				#hdus.close()
+				return data
 
 
 
@@ -732,7 +741,7 @@ class pyCallisto:
 		if plot:
 			# fig, ax = plt.subplots()
 			plt.clf()
-			plt.plot(bintblfreqdata[:-1], sumImage, 'b-',)	#check why we need to add -1 here
+			plt.plot(bintblfreqdata, sumImage, 'b-',)	#check why we need to add -1 here
 			plt.axis([bintblfreqdata[-1], bintblfreqdata[0], sumImage.min(), sumImage.max()])
 			plt.xlabel("Frequency (MHz)", fontSize=fontSize)
 			plt.ylabel('Total count', fontSize=fontSize)
@@ -743,12 +752,12 @@ class pyCallisto:
 				plt.grid()
 			plt.savefig(outImage)
 			#hdus.close()
-		
-		if returnData: 
-			# compose data into a list
-			data = [sumImage, bintblfreqdata]
-			hdus.close()
-			return data
+		else:
+			if returnData: 
+				# compose data into a list
+				data = [sumImage, bintblfreqdata]
+				hdus.close()
+				return data
 
 
 
@@ -969,7 +978,7 @@ class pyCallisto:
 			plt.clf()
 			#fig, ax = plt.subplots(figsize=(7, 6))
 			fig, ax = plt.subplots(figsize = (figSize[0], figSize[1]))
-			ax.plot_date(bintblfreqdata[:-1], spectrum, 'b-', xdate=True)
+			ax.plot_date(bintblfreqdata, spectrum, 'b-', xdate=True)
 			ticks =list( np.linspace(bintblfreqdata[-1], bintblfreqdata[0], 20).astype('int')) #calculate 200 ticks positins 
 			plt.xticks(ticks, ticks, rotation= 45)
 			#ax.xaxis.set_major_formatter(DateFormatter("%H:%M:%S"))
