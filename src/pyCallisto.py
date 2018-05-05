@@ -664,6 +664,9 @@ class pyCallisto:
 	
 		# Sum the data along oth axis
 		sumImage = np.sum(imageData, axis=0)
+		#print("yshape")
+		#print(imageData.shape[0])
+		sumImage = sumImage / imageData.shape[0]		#divide by 200 to normalize
 	
 		startDate = utils.toDate(imageHeader['DATE-OBS'])
 		startTime = utils.toTime(imageHeader['TIME-OBS'])
@@ -680,7 +683,7 @@ class pyCallisto:
 		timeAxis = [time for time in gettimeAxis(startTime, endTime, (endTime - startTime) / sumImage.shape[0])]
 	
 		if plot:
-			plt.clf()
+			#plt.clf()  #check back if this is needed
 			#fig, ax = plt.subplots()
 			fig, ax = plt.subplots(figsize = (figSize[0], figSize[1]))
 			ax.plot_date(timeAxis, sumImage, 'b-', xdate=True)
@@ -737,6 +740,7 @@ class pyCallisto:
 	
 		# Sum the data along oth axis
 		sumImage = np.sum(imageData, axis=1)
+		sumImage = sumImage / imageData.shape[1]		#divide by xsize to normalize
 		 
 		if plot:
 			# fig, ax = plt.subplots()
@@ -1000,3 +1004,125 @@ class pyCallisto:
 			if returnData:	
 				return (bintblfreqdata, spectrum)
 
+
+
+	def universalPlot(self, title='Universal Plot',returnPlot=False,xtick=3,ytick=3, endPts= [False, False], blevel=0,figSize=(8,8), cmap=cm.jet, labelFontSize=10, titleFontSize=14, cBar=True, cBarOri='horizontal'):
+		"""
+		plot universal plot
+		"""
+
+
+		#create global plot object with subplot
+		fig=plt.figure(figsize = (figSize[0], figSize[1]))
+
+
+		#plot the spectrogram in the one subplot
+		ax1=plt.subplot2grid(shape=(8,8),loc=(0,0),rowspan=5,colspan=5)
+	
+		# get the start time and end time of observation
+		startDate = utils.toDate(self.imageHeader['DATE-OBS'])
+		startTime = utils.toTime(self.imageHeader['TIME-OBS'])
+
+
+		startTime = dt.datetime.combine(startDate, startTime)  # make a datetime object
+		endTime = utils.toTime(self.imageHeader['TIME-END'])
+		endTime = dt.datetime.combine(startDate, endTime)
+
+		# get the frequencies
+		freqs = self.binTableHdu.data['frequency'][0]  # these are true frequencies
+
+		# set the limits for plotting 
+		xLims = [startTime, endTime]
+		xLims = mdates.date2num(xLims)  # dates to numeric values
+		yLims = [freqs[-1], freqs[0]]
+
+
+
+		cax = ax1.imshow(self.imageHdu.data, extent=[xLims[0], xLims[1], yLims[0], yLims[1]], aspect='auto', cmap=cmap, vmin=blevel)
+#		if cBar == True:
+#			ticks =list( np.linspace(blevel,self.dataMax, 10).astype('int')) #calculate 10 ticks positins 
+#			if cBarOri == 'horizontal':
+#				cBar = fig.colorbar(cax, ticks = ticks, orientation='horizontal', )
+#			else:
+#				cBar = fig.colorbar(cax, ticks = ticks)
+#			cBar.set_label('Intensity', rotation= 90)
+
+		ax1.xaxis_date()  # x axis has a date data
+
+		ax1.xaxis.set_major_locator(mdates.MinuteLocator(byminute=range(60), interval=xtick, tz=None))
+		ax1.xaxis.set_major_formatter(DateFormatter('%H:%M:%S'))
+		ax1.tick_params(axis='x',size=2)
+
+		#set ytick labels to be intigers only, in case we have a small frequency range, pyplot tends to show fraction 
+		ax1.get_yaxis().get_major_formatter().set_useOffset(False)
+
+		
+		plt.minorticks_on()
+		
+		if endPts[0]:
+			#get the start time and end time ans set ticks at those position son x-axis using minor_locator
+			total_sec = utils.tosec(endTime - startTime)
+			ax1.xaxis.set_minor_locator(mdates.SecondLocator(bysecond=None, interval=total_sec, tz=None))
+			ax1.xaxis.set_minor_formatter(DateFormatter('%H:%M:%S'))
+		fig.autofmt_xdate()
+
+		if endPts[1]:
+			#set y minorticks for first and last frequency
+			plt.yticks(list(plt.yticks()[0]) + yLims)
+		
+		#plt.xlabel('Universal Time')
+		plt.ylabel('Frequency (MHz)',fontSize=labelFontSize)
+		
+		#title = fitsfile + "\n" + imageHeader['DATE-OBS'] + "::" + imageHeader['TIME-OBS']
+		#ax1.axes.get_xaxis().set_visible(False) 
+		
+		ax1.tick_params(direction='in', axis='both', which='both')
+		ax1.yaxis.set_ticks_position('both')
+		ax1.xaxis.set_ticks_position('both')
+
+		
+		#title = self.imageHeader['CONTENT']
+		#plt.title(title)	
+		#plt.show()
+		#return plt
+
+
+
+
+
+
+
+		ax2 = plt.subplot2grid(shape=(8,8),loc=(5,0),rowspan=3,colspan=5, sharex=ax1)
+		#ax3 = plt.subplot(313, sharex=ax1, sharey=ax1)
+		
+		#use meanlightcurve to get the lightcurve data
+		data = self.meanLightCurve(plot=False, returnData=True) 
+		sumImage, timeInSec, timeAxis = data
+		#print(type(data))
+		#print(len(data))
+		#print()
+		plt.minorticks_on()
+		ax2.plot(timeAxis, sumImage)
+		ax2.tick_params(direction='in', axis='both', which='both')
+		ax2.yaxis.set_ticks_position('both')
+		ax2.xaxis.set_ticks_position('both')
+
+
+
+
+		#define ax3
+		ax3 = plt.subplot2grid(shape=(8,8),loc=(0,5),rowspan=5,colspan=3, sharey=ax1)
+		#use meanspectrum to get spectrum data
+		data = self.meanSpectrum(plot=False, returnData=True)
+		sumImage, bintblfreqdata = data
+		#use spectrum data to plot spectrum in third subplot
+		ax3.plot(sumImage, bintblfreqdata)
+		ax3.yaxis.tick_right()
+		plt.minorticks_on()
+		ax3.yaxis.set_ticks_position('both')
+		ax3.xaxis.set_ticks_position('both')
+		ax3.tick_params(direction='in', axis='both', which='both')
+		plt.xticks(rotation=45)
+		plt.savefig("universal_plot.png")
+		#plt.show()
+		
