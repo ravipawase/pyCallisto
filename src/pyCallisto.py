@@ -681,6 +681,12 @@ class pyCallisto:
 				curr += delta
 	
 		timeAxis = [time for time in gettimeAxis(startTime, endTime, (endTime - startTime) / sumImage.shape[0])]
+		timeAxis = timeAxis[:-1]
+		
+		print(startTime)
+		print(endTime)
+		print(timeAxis[0])
+		print(timeAxis[-1])
 	
 		if plot:
 			#plt.clf()  #check back if this is needed
