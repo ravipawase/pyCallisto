@@ -681,7 +681,7 @@ class pyCallisto:
 				curr += delta
 	
 		timeAxis = [time for time in gettimeAxis(startTime, endTime, (endTime - startTime) / sumImage.shape[0])]
-		timeAxis = timeAxis[:-1]
+		
 		
 		print(startTime)
 		print(endTime)
