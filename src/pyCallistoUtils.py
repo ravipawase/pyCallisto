@@ -64,10 +64,16 @@ def toTime(string):
 	hr, mn, sec = string.split(':')
 	sec = sec.split('.')[0]  # if sec has a fractional value
 	hr, mn, sec = int(hr), int(mn), int(sec)
-	#if second's value is 60, replace it to 59
+	#if second's value is 60, replace it to 00 and update and manage propogative changes in the minute and hour values
 	#some old data from some observatories has this "leap second" problem
-	if sec == 60:
-		sec = 59
+	if(sec == 60):
+		sec = 00
+		mn = mn + 1
+		if mn > 59:
+			hr = hr +1
+			mn = mn - 60
+			if hr > 23:
+				hr = hr - 24
 	return dt.time(hr, mn, sec)
 
 

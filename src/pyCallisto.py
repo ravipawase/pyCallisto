@@ -12,6 +12,8 @@ import matplotlib
 import io
 import pyCallistoUtils as utils		#local utility file
 import copy
+from mpl_toolkits.axes_grid1.axes_divider import make_axes_locatable
+from mpl_toolkits.axes_grid1.colorbar import colorbar
 
 class pyCallisto:
 
@@ -673,6 +675,7 @@ class pyCallisto:
 		startTime = dt.datetime.combine(startDate, startTime)  # make a datetime object
 		endTime = utils.toTime(imageHeader['TIME-END'])
 		endTime = dt.datetime.combine(startDate, endTime)
+		timeDelta = dt.timedelta(days=0, hours=0, minutes=0, seconds=imageHeader['CDELT1'])
 
 		def gettimeAxis(start, end, delta):
 			curr = start
@@ -680,13 +683,22 @@ class pyCallisto:
 				yield curr
 				curr += delta
 	
-		timeAxis = [time for time in gettimeAxis(startTime, endTime, (endTime - startTime) / sumImage.shape[0])]
+		#timeAxis = [time for time in gettimeAxis(startTime, endTime, (endTime - startTime) / sumImage.shape[0])]
+		timeAxis = [time for time in gettimeAxis(startTime, endTime, timeDelta) ]
 		
+		#0:00:00.249861
+		#form delta from header information
+		#
 		
 		print(startTime)
 		print(endTime)
-		print(timeAxis[0])
-		print(timeAxis[-1])
+		print ( ((endTime - startTime) / sumImage.shape[0]) )
+		#print ( type((endTime - startTime) / sumImage.shape[0]) )
+		#print (timeDelta)
+		#print (type(timeDelta))
+		#print(len(timeAxis))
+		#print(timeAxis[0])
+		#print(timeAxis[-1])
 	
 		if plot:
 			#plt.clf()  #check back if this is needed
@@ -947,9 +959,9 @@ class pyCallisto:
 				raise Exception("Date and/or time not in proper format")
 
 		
-		#print(inDateTime)
-		#print(startTime)
-		#print(endTime)
+		print(inDateTime)
+		print(startTime)
+		print(endTime)
 		#check input time
 		if(inDateTime < startTime or inDateTime > endTime):
 			raise Exception("Input time is out of limit for this data, aborting the operation")
@@ -1012,7 +1024,7 @@ class pyCallisto:
 
 
 
-	def universalPlot(self, title='Universal Plot',returnPlot=False,xtick=3,ytick=3, endPts= [False, False], blevel=0,figSize=(8,8), cmap=cm.jet, labelFontSize=10, titleFontSize=14, cBar=True, cBarOri='horizontal'):
+	def universalPlot(self, title='Universal Plot',returnPlot=False,xtick=3,ytick=3, endPts= [False, False], blevel=0,figSize=(10,8), cmap=cm.jet, labelFontSize=10, titleFontSize=14, cBar=True, cBarOri='horizontal'):
 		"""
 		plot universal plot
 		"""
@@ -1020,11 +1032,13 @@ class pyCallisto:
 
 		#create global plot object with subplot
 		fig=plt.figure(figsize = (figSize[0], figSize[1]))
-
+		
 
 		#plot the spectrogram in the one subplot
 		ax1=plt.subplot2grid(shape=(8,8),loc=(0,0),rowspan=5,colspan=5)
-	
+#		ax2 = plt.subplot2grid(shape=(9,8),loc=(6,0),rowspan=3,colspan=5, sharex=ax1)
+#		ax3 = plt.subplot2grid(shape=(9,8),loc=(1,5),rowspan=5,colspan=3, sharey=ax1)
+		
 		# get the start time and end time of observation
 		startDate = utils.toDate(self.imageHeader['DATE-OBS'])
 		startTime = utils.toTime(self.imageHeader['TIME-OBS'])
@@ -1043,8 +1057,12 @@ class pyCallisto:
 		yLims = [freqs[-1], freqs[0]]
 
 
-
-		cax = ax1.imshow(self.imageHdu.data, extent=[xLims[0], xLims[1], yLims[0], yLims[1]], aspect='auto', cmap=cmap, vmin=blevel)
+		im1 = ax1.imshow(self.imageHdu.data, extent=[xLims[0], xLims[1], yLims[0], yLims[1]], aspect='auto', cmap=cmap, vmin=blevel)
+#		ax1_divider = make_axes_locatable(ax1)
+#		cax1 = ax1_divider.append_axes("top", size="7%", pad="2%")
+#		cb1 = colorbar(im1, cax=cax1, orientation="horizontal")
+#		cax1.xaxis.set_ticks_position("top")
+#		
 #		if cBar == True:
 #			ticks =list( np.linspace(blevel,self.dataMax, 10).astype('int')) #calculate 10 ticks positins 
 #			if cBarOri == 'horizontal':
@@ -1053,17 +1071,16 @@ class pyCallisto:
 #				cBar = fig.colorbar(cax, ticks = ticks)
 #			cBar.set_label('Intensity', rotation= 90)
 
-		ax1.xaxis_date()  # x axis has a date data
-
-		ax1.xaxis.set_major_locator(mdates.MinuteLocator(byminute=range(60), interval=xtick, tz=None))
-		ax1.xaxis.set_major_formatter(DateFormatter('%H:%M:%S'))
-		ax1.tick_params(axis='x',size=2)
+		#do not plot x ticks as it will share with the bottom subplot
+		#ax1.xaxis_date()  # x axis has a date data
+		#ax1.xaxis.set_major_locator(mdates.MinuteLocator(byminute=range(60), interval=xtick, tz=None))
+		#ax1.xaxis.set_major_formatter(DateFormatter('%H:%M:%S'))
+		#ax1.tick_params(axis='x',size=2)
 
 		#set ytick labels to be intigers only, in case we have a small frequency range, pyplot tends to show fraction 
 		ax1.get_yaxis().get_major_formatter().set_useOffset(False)
-
-		
 		plt.minorticks_on()
+		
 		
 		if endPts[0]:
 			#get the start time and end time ans set ticks at those position son x-axis using minor_locator
@@ -1085,7 +1102,10 @@ class pyCallisto:
 		ax1.tick_params(direction='in', axis='both', which='both')
 		ax1.yaxis.set_ticks_position('both')
 		ax1.xaxis.set_ticks_position('both')
-
+		ax1.tick_params(labelbottom=False)
+		
+		
+		#ax1.set_aspect('auto')
 		
 		#title = self.imageHeader['CONTENT']
 		#plt.title(title)	
@@ -1093,12 +1113,16 @@ class pyCallisto:
 		#return plt
 
 
-
-
-
+#		ax1_1 = plt.subplot2grid(shape=(9,8),loc=(0,0),rowspan=1,colspan=5, sharex=ax1)
+#		im1 = ax1_1.imshow(self.imageHdu.data, extent=[xLims[0], xLims[1], yLims[0], yLims[1]], aspect='auto', cmap=cmap, vmin=blevel)
+#		ticks =list( np.linspace(blevel,self.dataMax, 10).astype('int')) #calculate 10 ticks positins 
+#		im1.set_visible(False)
+#		cBar = fig.colorbar(im1, ticks = ticks, orientation='horizontal', )
 
 
 		ax2 = plt.subplot2grid(shape=(8,8),loc=(5,0),rowspan=3,colspan=5, sharex=ax1)
+		#ax2 = plt.subplot2grid(shape=(8,8),loc=(5,0),rowspan=3,colspan=5, sharex=ax1)
+#		ax2 = plt.subplot2grid(shape=(8,8),loc=(5,0),rowspan=3,colspan=5)
 		#ax3 = plt.subplot(313, sharex=ax1, sharey=ax1)
 		
 		#use meanlightcurve to get the lightcurve data
@@ -1108,27 +1132,42 @@ class pyCallisto:
 		#print(len(data))
 		#print()
 		plt.minorticks_on()
+		plt.xticks(rotation=45)
 		ax2.plot(timeAxis, sumImage)
 		ax2.tick_params(direction='in', axis='both', which='both')
 		ax2.yaxis.set_ticks_position('both')
 		ax2.xaxis.set_ticks_position('both')
+		ax2.margins(0.0)
+		ax2.set_xlabel('Universal Time')
 
 
 
 
 		#define ax3
 		ax3 = plt.subplot2grid(shape=(8,8),loc=(0,5),rowspan=5,colspan=3, sharey=ax1)
+		#ax3 = plt.subplot2grid(shape=(8,8),loc=(0,5),rowspan=4,colspan=3, sharey=ax1)
+		#ax3 = plt.subplot2grid(shape=(8,8),loc=(0,5),rowspan=5,colspan=3)
 		#use meanspectrum to get spectrum data
 		data = self.meanSpectrum(plot=False, returnData=True)
 		sumImage, bintblfreqdata = data
 		#use spectrum data to plot spectrum in third subplot
 		ax3.plot(sumImage, bintblfreqdata)
-		ax3.yaxis.tick_right()
+		#ax3.yaxis.tick_right()
 		plt.minorticks_on()
+		ax3.tick_params(direction='in', axis='both', which='both')
 		ax3.yaxis.set_ticks_position('both')
 		ax3.xaxis.set_ticks_position('both')
-		ax3.tick_params(direction='in', axis='both', which='both')
+		#ax3.tick_params(direction='in', axis='both', which='both')
+		ax3.tick_params(labelleft=False)
+		ax3.tick_params(labelright=True)
 		plt.xticks(rotation=45)
+		ax3.margins(0.0)
+		#plt.tight_layout()
+
+
+		plt.suptitle(title, fontsize = titleFontSize + 4)
+		fig.subplots_adjust(right=0.8)
+		cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+		fig.colorbar(im1, cax=cbar_ax)
 		plt.savefig("universal_plot.png")
-		#plt.show()
 		

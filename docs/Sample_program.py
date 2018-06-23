@@ -13,8 +13,20 @@ import pyCallistoUtils as utils
 import astropy.io.fits as pyfits
 import matplotlib.pyplot as plt
 
-fits1_path = '../data/IISERP_20151104_031152_59.fit'
-fits2_path = '../data/IISERP_20151104_032652_59.fit'
+#fits1_path = '../data/IISERP_20151104_031152_59.fit'
+#fits2_path = '../data/IISERP_20151104_032652_59.fit'
+
+#fits1_path = '../data/GAURI_20151104_042959_59.fit'
+#fits2_path =  '../data/GAURI_20151104_044459_59.fit'
+
+fits1_path = '../data/GAURI_20151104_033000_59.fit'			#####
+fits2_path =  '../data/GAURI_20151104_034500_59.fit'		#####
+
+#fits1_path = '../data/GAURI_20151104_035959_59.fit'
+#fits2_path =  '../data/GAURI_20151104_041459_59.fit'
+
+#fits1_path = '../data/data.fits'
+#fits2_path =  '../data/data_1.fits'
 
 
 #plot multiple files
@@ -23,25 +35,31 @@ plt = fits1.spectrogram() #this will show in imshow thing
 plt.savefig("fits1.png")
 
 
+#plot multiple files
+fits2 = pyc.pyCallisto.fromFile(fits2_path)
+plt = fits2.spectrogram() #this will show in imshow thing
+plt.savefig("fits2.png")
+
+
 #join time axis
 joined1 = fits1.appendTimeAxis(fits2_path)
 plt = joined1.spectrogram() #this will show in imshow thing
 plt.savefig("joined.png")
 
 #slice in frequency axis
-freq_sliced = joined1.sliceFrequencyAxis("200", "600")
+freq_sliced = joined1.sliceFrequencyAxis("200", "400")
 plt = freq_sliced.spectrogram() #this will show in imshow thing
 plt.savefig("freq_sliced.png")
 
 
 #slice in time axis
-time_sliced = freq_sliced.sliceTimeAxis("03:23:00", "03:29:00")
+time_sliced = freq_sliced.sliceTimeAxis("03:35:00", "03:59:58")
 plt = time_sliced.spectrogram() #this will show in imshow thing
 plt.savefig("time_sliced.png")
 
 
 #do background subtraction
-background_subtracted = freq_sliced.subtractBackground()
+background_subtracted = fits2.subtractBackground()
 plt = background_subtracted.spectrogram()
 plt.savefig("background_subtracted.png")
 
@@ -57,6 +75,6 @@ background_subtracted.lightCurve(300, outImage ="Lightcurve.png", grid=True)
 
 
 #get spectrum
-background_subtracted.spectrum( '2015/11/04','03:26:00', outImage ="singletimespectrum.png", grid=True)
+background_subtracted.spectrum( '2015/11/04','03:50:00', outImage ="singletimespectrum.png", grid=True)
 
 
