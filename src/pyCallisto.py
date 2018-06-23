@@ -690,9 +690,9 @@ class pyCallisto:
 		#form delta from header information
 		#
 		
-		print(startTime)
-		print(endTime)
-		print ( ((endTime - startTime) / sumImage.shape[0]) )
+		#print(startTime)
+		#print(endTime)
+		#print ( ((endTime - startTime) / sumImage.shape[0]) )
 		#print ( type((endTime - startTime) / sumImage.shape[0]) )
 		#print (timeDelta)
 		#print (type(timeDelta))
@@ -1024,7 +1024,7 @@ class pyCallisto:
 
 
 
-	def universalPlot(self, title='Universal Plot',returnPlot=False,xtick=3,ytick=3, endPts= [False, False], blevel=0,figSize=(10,8), cmap=cm.jet, labelFontSize=10, titleFontSize=14, cBar=True, cBarOri='horizontal'):
+	def universalPlot(self, plotName = "universal_plot_with_add_processing.png", title='Universal Plot',returnPlot=False,xtick=3,ytick=3, endPts= [False, False], blevel=0,figSize=(10,8), cmap=cm.jet, labelFontSize=10, titleFontSize=14, cBar=True, cBarOri='horizontal'):
 		"""
 		plot universal plot
 		"""
@@ -1133,7 +1133,7 @@ class pyCallisto:
 		#print()
 		plt.minorticks_on()
 		plt.xticks(rotation=45)
-		ax2.plot(timeAxis, sumImage)
+		ax2.plot(timeAxis, sumImage, 'k')
 		ax2.tick_params(direction='in', axis='both', which='both')
 		ax2.yaxis.set_ticks_position('both')
 		ax2.xaxis.set_ticks_position('both')
@@ -1151,7 +1151,7 @@ class pyCallisto:
 		data = self.meanSpectrum(plot=False, returnData=True)
 		sumImage, bintblfreqdata = data
 		#use spectrum data to plot spectrum in third subplot
-		ax3.plot(sumImage, bintblfreqdata)
+		ax3.plot(sumImage, bintblfreqdata, 'k')
 		#ax3.yaxis.tick_right()
 		plt.minorticks_on()
 		ax3.tick_params(direction='in', axis='both', which='both')
@@ -1160,6 +1160,7 @@ class pyCallisto:
 		#ax3.tick_params(direction='in', axis='both', which='both')
 		ax3.tick_params(labelleft=False)
 		ax3.tick_params(labelright=True)
+		ax3.invert_xaxis()
 		plt.xticks(rotation=45)
 		ax3.margins(0.0)
 		#plt.tight_layout()
@@ -1167,7 +1168,7 @@ class pyCallisto:
 
 		plt.suptitle(title, fontsize = titleFontSize + 4)
 		fig.subplots_adjust(right=0.8)
-		cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+		cbar_ax = fig.add_axes([0.85, 0.15, 0.03, 0.7])
 		fig.colorbar(im1, cax=cbar_ax)
-		plt.savefig("universal_plot.png")
+		plt.savefig(plotName)
 		
