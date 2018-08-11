@@ -1,3 +1,5 @@
+import sys
+sys.path.append('.')
 import datetime as dt
 #import pyfits
 import astropy.io.fits as pyfits
@@ -42,6 +44,9 @@ class pyCallisto:
 	def fromFile(cls, infits):
 		"""
 		Create pyCallisto object from fits file on disc
+
+		input arguments:
+			infits: input fits file
 		
 		"""
 		
@@ -69,7 +74,16 @@ class pyCallisto:
 	def spectrogram(self, option=3, xtick= 2, blevel=0, endPts= [False, False], figSize = (8, 6), cmap=cm.jet, cBar=True, cBarOri='vertical', fontSize=14):
 
 		"""
-		Return a plt object representing the plot of the input fits file
+		Return a matplotlib.pyplot.plot object representing the plot of the input fits file.
+
+		input arguments:
+			xticks: frequency of xticks in mins (default =2 )
+			blevel: background level (default = 0)
+			figsize: a tuple representing size of image (default = (8,6))
+			cmap: a matplotlib colormap object (default = cm.jet)
+			cbar: to plot a colorbar or not (default = true)
+			cBarOri: colorbar orientation (default = 'vertical')
+			fontSize: fontsize used in plot (default = 14)
 
 		"""
 		#plot the fig 
@@ -183,13 +197,13 @@ class pyCallisto:
 
 
 	def appendTimeAxis(self, fits2):
-		"""Take second radiohelliograph observation fits file and join two in time axis (x axis) and return new pyCallisto object.
+		"""
+		Take second radiohelliograph observation fits file and join two in time axis (x axis) and return new pyCallisto object.
 
-		Args:
-			fits2 (string or pyCallisto object): Second input fits file
+
+		input arguments:
+			fits2: path of a Second input fits file or pyCallisto object 
 			
-		Returns:
-			Returns pyCallisto object
 		"""
 
 
@@ -323,13 +337,13 @@ class pyCallisto:
 
 
 	def sliceTimeAxis(self, time1, time2):
-		"""Make a slice of input radiohelliograph observation fits file along a time axis and return a new object
+		"""
+		Make a slice of input radiohelliograph observation fits file along a time axis and return a new object
 	
-		Args:
-			time1 (string): start of a slice
-							time in HH:MM:SSformat 
-			time1 (string): end of a slice
-							time in HH:MM:SS format
+		input arguments:
+			time1 (string): start of a slice, time in HH:MM:SSformat 			
+			time2 (string): end of a slice, time in HH:MM:SS format
+							
 		Returns
 			pyCallisto object
 		"""
@@ -450,9 +464,10 @@ class pyCallisto:
 
 
 	def sliceFrequencyAxis(self, freq1, freq2):
-		"""Make a slice of input radiohelliograph observation fits file along a frequency axis
+		"""
+		Make a slice of input radiohelliograph observation fits file along a frequency axis
 	
-		Args:
+		Input arguments:
 			freq1 (int): start of a slice
 			freq2 (int): end of a slice
 
@@ -596,12 +611,10 @@ class pyCallisto:
 
 
 	def subtractBackground(self):
-		"""estimate and subtract background from a fits file
+		"""
+		Estimate and subtract background from a fits file
 	
-		Args:
-			input " No input
-			output:
-				returns a pyCallisto object
+		returns a pyCallisto object		
 		"""
 	
 		# open input fits file
@@ -644,11 +657,14 @@ class pyCallisto:
 
 
 	def meanLightCurve(self, plot=True, outImage ="timeseries.png", returnData=False, figSize = (8, 8), fontSize=14, grid = True):
-		"""Collapse the 2D fits image along time axis and return 1D array
+		"""
+		Create mean light curve by Collapse the 2D fits image along time axis.
+		Eithers saves the image or returns the data
 	
-		Args:
-			plot (Boolean) : plot it or not, Default True
-			returnData (Boolean) :   default False
+		Input arguments:
+			plot (Boolean): plot it or not, Default True
+			outImage(string): name of the image to be saved
+			returnData (Boolean):  return data or not (default False)
 	
 		returns:if returnData is set to True 
 				list of collapsed 1d array (1d numpy array), 
@@ -737,12 +753,14 @@ class pyCallisto:
 
 
 	def meanSpectrum(self, plot=True, outImage ="frequency_series.png", returnData=False, fontSize = 14, grid = True):
-		"""Collapse the 2D fits image along frequency axis and return 1D array
+		"""
+		Create mean spectrum by collapsing the 2D fits image along frequency axis.
+		Either plots image or returns data.
 	
-		Args:
+		INput arguments:
 			plot (Boolean): plot or not ?, Default True
 			outImage (String):  name of the png file to plot
-			returnData (Boolean) : return data or not, Default False
+			returnData (Boolean) : return data or not (Default False)
 		
 		returns : list of  collapsed 1d array (1d numpy array),
 				respective frequency channels (1d numpy array)
@@ -787,7 +805,7 @@ class pyCallisto:
 
 	def printFrequencies(self):
 		"""
-		Print the list of frequencies
+		Print the list of frequencies.
 		"""
 		# open input fits file
 		hdus = self.hdus
@@ -809,14 +827,17 @@ class pyCallisto:
 #spectrum: frequency vs amplitude for given time
 
 	def lightCurve(self, frequency, plot=True, outImage ="Lightcurve.png", returnData=False, figSize = (8, 8), fontSize=14, grid =True):
-		"""Plot the lightcurve for given frequency, i.e. time vs amplitude, or return the data
+		"""
+		Plot the lightcurve for given frequency, i.e. time vs amplitude, or return the data
 	
-		Args:
-			frequency : frequency to plot lightcurve
-			plot (Boolean) : plot it or not, Default True
-			outImage : Name of the image to save, default is "Lightcurve.png"
-			returnData (Boolean) :   default False
-	
+		Input arguments:
+			frequency: frequency to plot lightcurve
+			plot (Boolean): plot it or not (Default = True)
+			outImage: Name of the image to save, default is "Lightcurve.png"
+			returnData (Boolean) : return the data or not (default = False)
+			figsize: size of the fig (default = (8, 8))
+			fontsize: fontsize of the used in plots (default =14)
+			grid: to plot agrid or not (default = True)
 		returns:if returnData is set to True 
 #				return a tuple of (timeAxis, lightCurve)
 				where 
@@ -891,7 +912,7 @@ class pyCallisto:
 				plt.grid()
 			#plt.show()
 			plt.savefig(outImage)
-			plt.clf()
+			#plt.clf()
 		else:
 			if returnData:	
 				return (timeAxis, lightCurve)
@@ -900,23 +921,31 @@ class pyCallisto:
 
 
 	def spectrum(self, inDate, inTime, binning = 2, binningMethod= 'avg', plot=True, outImage ="singletimespectrum.png", returnData=False, figSize = (8, 6), fontsize=14, grid=True):
-		"""Plot the spectrum for a given time, i.e. amplitude at all frequencies at given time
+		"""
+		Plot the spectrum for a given time, i.e. amplitude at all frequencies at given time
 	
-		Args:
+		Input arguments:
 			indate :date to plot spectrum of, 
 					should be a python datetime object or 
 					string of format 'YYYY/MM/DD'
 			intime : time to plot spectrum of, 
 					should be a python datetime.time object or 
 					string of format 'HH:MM:SS'
-					
+			binning: pixel-level binning while selecting a row (default = 2)
+				caution, only advanced users should alter this parameter
+			binnigmethod : either of avg, sum, med (default = 'avg')
 			plot (Boolean) : plot it or not, Default True
 			outimage : Name of the image to save, default is "singletimespectrum.png"
 			returndata (Boolean) :   default False
+			figsize: size of the fig (default = (8, 8))
+			fontsize: fontsize of the used in plots (default =14)
+			grid: to plot agrid or not (default = True)
 	
 		returns:if returndata is set to True 
-#				return a tuple of ()
+				return a tuple of (bintblfreqdata, spectrum)
 				where 
+					bintblfreqdata :  list of frequencies
+					spectrum :  intensity count at these respective ffrequencies
 
 		"""
 		
@@ -959,11 +988,11 @@ class pyCallisto:
 				raise Exception("Date and/or time not in proper format")
 
 		
-		print(inDateTime)
-		print(startTime)
-		print(endTime)
-		#check input time
+			#check input time
 		if(inDateTime < startTime or inDateTime > endTime):
+			print("Provided datetime is "+str(inDateTime))
+			print("Start datetime for this file is "+str(startTime))
+			print("End datetime for this file is"+str(endTime))
 			raise Exception("Input time is out of limit for this data, aborting the operation")
 			
 			
@@ -1014,7 +1043,7 @@ class pyCallisto:
 				plt.grid()
 			#plt.show()
 			plt.savefig(outImage)
-			plt.clf()
+			#plt.clf()
 			
 			#print(bintblfreqdata.shape)
 			#print(bintblfreqdata)
@@ -1027,8 +1056,23 @@ class pyCallisto:
 	def universalPlot(self, plotName = "universal_plot_with_add_processing.png", title='Universal Plot',returnPlot=False,xtick=3,ytick=3, endPts= [False, False], blevel=0,figSize=(10,8), cmap=cm.jet, labelFontSize=10, titleFontSize=14, cBar=True, cBarOri='horizontal'):
 		"""
 		plot universal plot
-		"""
 
+
+		input arguments:
+			plotName: name of the image to be saved
+			title: title of plot
+			returnPlot: to return matplotlib plot object or not (defayult = False)
+			xtick: frequency of xticks in minutes (default = 3)
+			ytick: frequency of yticks in minutes (default = 3)
+			endPts:	plot endpoints on x and y axis irrespective of ticks (fefault= (False, false))
+			blevel: background level (default = 0)
+			figSize:  tuple representing size of image (default = (8,6))
+			cmap: a matplotlib colormap object (default = cm.jet)
+			labelFontSize: fontsize used in plot for labels (default = 10)
+			titleFontSize: fontsize used in plot for title (default = 14)
+			cBar: to plot a colorbar or not (default = true)
+			cBarOri: colorbar orientation (default = 'vertical')
+		"""
 
 		#create global plot object with subplot
 		fig=plt.figure(figsize = (figSize[0], figSize[1]))

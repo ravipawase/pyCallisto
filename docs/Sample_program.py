@@ -33,6 +33,7 @@ fits2_path =  '../data/GAURI_20151104_034500_59.fit'		#####
 fits1 = pyc.pyCallisto.fromFile(fits1_path)
 plt = fits1.spectrogram() #this will show in imshow thing
 plt.savefig("fits1.png")
+plt.savefig("fits1.eps")
 
 
 #plot multiple files
