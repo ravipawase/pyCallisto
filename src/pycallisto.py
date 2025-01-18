@@ -722,12 +722,12 @@ class PyCallisto:
             ax.xaxis.set_major_formatter(DateFormatter("%H:%M:%S"))
             plt.xticks(rotation=45)
 
-            plt.xlabel('Universal Time', fontSize=font_size)
-            plt.ylabel('Amplitude', fontSize=font_size)
+            plt.xlabel('Universal Time', fontsize=font_size)
+            plt.ylabel('Amplitude', fontsize=font_size)
             # title = infits + "\n" + image_header['DATE-OBS'] + "::" + image_header['TIME-OBS']
             # title = self.image_header['CONTENT']
             title = "Light curve - " + str(round(nearest_frequency, 2)) + " MHz"
-            plt.title(title, fontSize=font_size)
+            plt.title(title, fontsize=font_size)
             if grid:
                 plt.grid()
             plt.savefig(out_image)
