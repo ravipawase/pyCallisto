@@ -4,7 +4,8 @@ pyCallisto is a image processing and data analysis python library developed for 
 
 # Installation
 
-At present, you can use this library by copying the source files (pyCallisto.py and pyCallistoUtils.py) to a local folder. The data and main program have to located in the same folder. In the main program you have to import the source files as shown in sample_program.py. 
+Now you can pip install it. Head over to Pypi to check the details.
+https://pypi.org/project/pyCallisto/
 
 # Pre-requisites and Standard Python Libraries 
 
