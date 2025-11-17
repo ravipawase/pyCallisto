@@ -11,12 +11,13 @@ fits1_path = '../data/IISERP_20151104_031152_59.fit'
 
 fits1 = pyc.PyCallisto.from_file(fits1_path)
 plt = fits1.spectrogram()
-plt.savefig('test.png')
+#plt.savefig('test.png')
 plt.clf()
 
 freq_sliced = fits1.slice_frequency_axis(300, 400)
 
 plt = freq_sliced.spectrogram()
-plt.savefig('freq_sliced_300_400.png')
+#plt.savefig('freq_sliced_300_400.png')
+plt.show()
 
 
