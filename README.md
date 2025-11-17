@@ -1,40 +1,74 @@
 # pyCallisto
 
-pyCallisto is a image processing and data analysis python library developed for e-CALLISTO data (http://www.e-callisto.org/). However, this library could be used to process the data obtained using various solar radio spectrometers available around the globe.
+pyCallisto is an image processing and data analysis Python library developed for e-CALLISTO data (http://www.e-callisto.org/). This library can be used to process data obtained using various solar radio spectrometers available around the globe.
 
 # Installation
 
-Now you can pip install it. Head over to Pypi to check the details.
-https://pypi.org/project/pyCallisto/
+You can install pyCallisto using pip:
 
-# Pre-requisites and Standard Python Libraries 
+```bash
+pip install pyCallisto
+```
 
-    python 3.6,
-    numpy,
-    matplotlib,
-    astropy.
+For more details, visit: https://pypi.org/project/pyCallisto/
+
+# Prerequisites and Standard Python Libraries 
+
+**Required:**
+- Python 3.6 or higher
+- numpy
+- matplotlib
+- astropy
+
+**Optional (for GOES integration):**
+- sunpy
+- scipy
+
+Install optional dependencies with:
+```bash
+pip install sunpy scipy
+```
+
+# Features
+
+- **Spectrogram Visualization**: Generate spectrograms from FITS files with customizable colormaps and parameters
+- **Time and Frequency Slicing**: Extract specific time ranges and frequency bands from observations
+- **Light Curve Analysis**: Create mean light curves by collapsing data along time axis
+- **Spectrum Analysis**: Generate frequency spectra for specific time instances
+- **GOES Integration**: Overlay GOES X-ray flux data on spectrograms for comprehensive solar event analysis
+- **Background Subtraction**: Automated background estimation and removal
+- **Universal Plot**: Combined visualization of spectrogram, light curve, and spectrum
+- **File Concatenation**: Merge multiple FITS files along time axis for extended observations
 
 # Contributors
 
-    Mr. Ravindra Pawase, 
-    Team Lead (Machine Learning), 
-    Persistent Systems, 
-    Pune-411 004, India.
-    
-    Dr. K. Sasikumar Raja, 
-    National Post Doctoral Fellow, 
-    Deparment of Physics, 
-    Indian Institute of Science Education and Research, 
-    Dr. Homi Bhabha Road, Pashan, Pune-411 008, India.
+**Mr. Ravindra Pawase**  
+Data Scientist  
+Cummins Inc.  
+Pune-411 004, India
+
+**Dr. K. Sasikumar Raja**  
+Assistant Professor  
+Indian Institute of Astrophysics  
+II Block, Koramangala, Bengaluru-560 034, India
+
+**Mr. Mrutyunjaya Muduli**  
+B.E. Computer Science and Engineering  
+Department of Computer Science and Engineering  
+HKBK College of Engineering  
+22/1, Opposite Manyata Tech Park, Nagavara, Bengaluru-560 045, India
 
 # Feedback
 
-If you have any feedback, queries, feature request you can drop a line at
+For feedback, queries, or feature requests, please contact:
 
-    ravi.pawase@gmail.com
-    sasikumarraja@gmail.com
+- ravi.pawase@gmail.com
+- sasikumarraja@gmail.com
+- mudulimrutyunjaya42@gmail.com
 
 # Citation
 
-If you find pyCallisto useful and make use of it in your work, we appreciate acknowledging the same. We recommend using the following line: "This work is made use of the pyCallisto library, which is available at https://github.com/ravipawase/pyCallisto"
+If you find pyCallisto useful in your work, we appreciate acknowledgment. We recommend using the following citation:
+
+"This work makes use of the pyCallisto library, which is available at https://github.com/ravipawase/pyCallisto"
 
